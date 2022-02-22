@@ -4,21 +4,21 @@ library(rvest)
 
 # Oppgave 1
 
-
+# Henter og leser data
 biler <- read_html("https://www.motor.no/aktuelt/motors-store-vintertest-av-rekkevidde-pa-elbiler/217132")
 
-
+# Gjør den om til en tabell
 biler <- biler %>% html_table()
 
-
+# Velger den første tabellen 
 biler <- biler[[1]]
 
-
+# Bytter navn på to kolonner jeg skal bruke senere
 biler <- biler %>% 
   rename(wltp = X2,
          stopp = X3)
 
-
+# Fjerner hva som er bak f.eks kw/h, slik at vi bare får ut tall
 biler$wltp <- substr(biler$wltp, 0, 3) %>% 
   as.numeric(biler$wltp)
 biler$stopp <- substr(biler$stopp, 0, 3) %>% 
@@ -26,7 +26,7 @@ biler$stopp <- substr(biler$stopp, 0, 3) %>%
 
 
 
-
+# Bruker tabellen til å lage et plot over hvor lang rekkevidde det faktisk er på bilen i forhold til hva de markedsfører at bilen skal ha.
 
 ggplot(biler, aes(x = wltp, y = stopp)) +
   geom_point() + 
